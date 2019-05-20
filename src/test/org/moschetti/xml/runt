@@ -1,0 +1,11 @@
+JL=$HOME/java/lib
+
+CLASSPATH=$JL/junit.jar:$JL/subro-core.jar:$JL/jackson-databind-2.1.4.jar:$JL/jackson-annotations-2.1.4.jar:$JL/jackson-core-2.1.4.jar:.
+
+echo java -cp $CLASSPATH org.junit.runner.JUnitCore com.solel.subro.json.NegotiationJSONTest 
+
+(cd ../../../.. ; java -cp $CLASSPATH org.junit.runner.JUnitCore com.solel.subro.json.NegotiationJSONTest )
+
+
+
+

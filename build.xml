@@ -1,0 +1,116 @@
+<project name="moschetti-xml" default="testcompile" basedir=".">
+    <description>
+        simple example build file
+    </description>
+
+    <!-- set global properties for this build -->
+    <property name="src.main"   location="src/main"/>
+    <property name="src.test"   location="src/test"/>
+    <property name="build.main" location="build/main"/>
+    <property name="build.test" location="build/test"/>
+    
+    <property name="dist"       location="dist"/>
+    
+    <property name="jl"         value="/Users/buzz/java/lib"/>
+    
+    <property name="junit"      value="${jl}/junit.jar"/>
+
+    <property name="stagedlib"  value="${dist}/lib/moschetti-xml.jar"/>
+
+
+    <!-- Three kinds of classpaths:
+	1.  One to compile src/main
+	2.  One to compile src/test
+	3.  One to RUN src/test junits
+      -->
+    <path id="main.compile.classpath">
+      <!-- XML requires nothing at this time!  JDK1.6 platform 
+	   and our HashHandler only.   Neat.
+	-->
+	   
+    </path>
+
+    <path id="test.compile.classpath">
+      <path refid="main.compile.classpath" />
+      <pathelement location="${stagedlib}" />
+      <pathelement location="${junit}" />
+    </path>
+
+    <path id="test.run.classpath">
+      <path refid="test.compile.classpath" />
+      <pathelement     path="${build.test}"/>
+
+    </path>
+
+
+    <!-- ======================================================== -->
+    <!--  Below here is all based on the above; no need to touch -->
+    <!--     E X C E P T   THE JUNIT test classes; fix TBD!!      -->
+    <!-- ======================================================== -->
+
+
+    <target name="init">
+      <tstamp/>
+      <mkdir dir="${build.main}"/>
+      <mkdir dir="${build.test}"/>
+    </target>
+    
+
+    <target name="compile" depends="init" >
+      <javac srcdir="${src.main}" destdir="${build.main}" debug="on" includeantruntime="false">
+	<!-- <compilerarg value="-Xlint:unchecked" /> -->
+	<classpath>
+	  <path refid="main.compile.classpath" />
+	</classpath>
+      </javac>
+    </target>
+
+
+
+    <target name="dist" depends="compile"
+            description="generate the distribution" >
+      <mkdir dir="${dist}/lib"/>
+      <jar jarfile="${stagedlib}" basedir="${build.main}"/>
+    </target>
+
+
+
+
+    <target name="testcompile" depends="dist"
+            description="compile tests against the distribution" >
+      <javac srcdir="${src.test}" destdir="${build.test}" debug="on" includeantruntime="false">
+	<classpath>
+	  <path refid="test.compile.classpath" />
+	</classpath>
+      </javac>
+    </target>
+
+
+    <target name="testrun" depends="testcompile"
+            description="run the junits" >
+      <junit printSummary="yes">
+	<classpath>
+	  <path refid="test.run.classpath" />
+	</classpath>
+	
+	<formatter type="brief" usefile="false"/> 
+	
+
+	<test name="test.BasicXMLTest"/>
+
+      </junit>
+    </target>
+    
+
+    <target name="install" depends="dist">
+      <copy file="${stagedlib}" todir="${jl}"/>
+    </target>
+    
+
+    <target name="clean" >
+      <delete dir="${build.main}"/>
+      <delete dir="${build.test}"/>
+      <delete dir="${dist}"/>
+    </target>
+
+</project>
