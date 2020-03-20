@@ -295,9 +295,13 @@ public class HashHandler extends org.xml.sax.helpers.DefaultHandler {
     /**
      *  By default, HashHandler will store maps of blank strings when
      *  given things like this:
-     *     <tag></tag>   or    <tag/>
+     *  <pre>
+     *     &lt;tag&gt;&lt;/tag&gt;   or    &lt;tag/&gt;
+     *  </pre>
      *  This will resolve in the containing map to:
-     *     String s = map.get("tag"); // s is ""
+     *  <pre>
+     *     String s = map.get("tag"); // s is "", the blank string
+     *  </pre>
      */
     public HashHandler() {
 	init(true, java.util.HashMap.class);
@@ -306,17 +310,23 @@ public class HashHandler extends org.xml.sax.helpers.DefaultHandler {
     /**
      *  If storeBlanks is true, HashHandler will store maps of blank strings when
      *  given things like this:
-     *     <tag></tag>   or    <tag/>
+     *  <pre>
+     *     &lt;tag&gt;&lt;/tag&gt;   or    &lt;tag/&gt;
+     *  </pre>
      *  This will resolve in the containing map to:
-     *     String s = map.get("tag"); // s is ""
+     *  <pre>
+     *     String s = map.get("tag"); // s is "", the blank string
+     *  </pre>
      *  This can lead to "sparse" maps -- maps with a lot of keys but not
      *  a lot of REAL data -- but the "advantage" is that you know
      *  what tags came in.
      *
      *  If storeBlanks is false, then blank tags will not be stored in the 
      *  containing map.  Attributes in blank tags WILL be stored, e.g.:
-     *     <tag attr1="foo" />
+     *  <pre>
+     *     &lt;tag attr1="foo" /&gt;
      *  Map attrs = map.get("__attributes_tag"); // attrs["attr1"] = "foo"
+     *  </pre>
      *
      *
      */
